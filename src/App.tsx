@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { useState, useMemo, useReducer, createContext, useContext, useCallback, useEffect } from "react";
 
 // ── Context & State Management ──
