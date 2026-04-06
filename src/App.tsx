@@ -234,9 +234,9 @@ function BalanceTrendChart({ transactions, dark }) {
 }
 
 // ── Summary Card ──
-function SummaryCard({ icon, label, value, sub, color, sparkData, dark }) {
+function SummaryCard({ icon, label, value, sub, color, sparkData, dark }: any) {
   return (
-    <div style={{
+    <div className="hover-card" style={{
       background: dark ? "#1e293b" : "#ffffff",
       borderRadius: 16, padding: "20px 22px",
       border: `1px solid ${dark ? "#334155" : "#f1f5f9"}`,
@@ -434,8 +434,32 @@ export default function App() {
       minHeight: "100vh", background: bg, fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
       color: text1, transition: "background 0.3s, color 0.3s", lineHeight: 1.5,
     }}>
+      <style>{`
+        * { box-sizing: border-box; }
+        /* Add some nice hover effects */
+        .hover-card:hover { transform: translateY(-2px); transition: transform 0.2s; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
+        .txn-item { transition: background 0.15s; }
+        .txn-item:hover { background: ${dk ? "rgba(255,255,255,0.02)" : "rgba(0,0,0,0.01)"}; }
+        .toolbar-group select, .search-box { flex: 1 1; }
+        
+        /* Mobile Breakpoints */
+        @media (max-width: 680px) {
+          .summary-cards { flex-direction: column !important; }
+          .summary-cards > div { flex: 1 1 100% !important; width: 100%; }
+          .charts-row { flex-direction: column !important; }
+          .charts-row > div { flex: 1 1 100% !important; min-width: 100% !important; }
+          .toolbar-group { flex-direction: column !important; align-items: stretch !important; }
+          .toolbar-group select, .toolbar-group .search-box { min-width: 100% !important; flex: 1 1 100% !important; }
+          .toolbar-actions { display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
+          .toolbar-actions button { justify-content: center; }
+          .header-controls { margin-top: 10px; width: 100%; justify-content: flex-end; }
+          .txn-item-content { flex-direction: column; align-items: flex-start !important; gap: 12px !important; }
+          .txn-item-right { width: 100%; justify-content: space-between; }
+        }
+      `}</style>
+
       {/* Header */}
-      <div style={{
+      <div className="header" style={{
         background: card, borderBottom: `1px solid ${border}`, padding: "14px 24px",
         display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12,
         position: "sticky", top: 0, zIndex: 100,
@@ -447,7 +471,7 @@ export default function App() {
           }}>{Icons.wallet}</div>
           <span style={{ fontSize: 17, fontWeight: 700, letterSpacing: "-0.3px" }}>Fintrack</span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+        <div className="header-controls" style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
           <select value={state.role} onChange={e => dispatch({ type: "SET_ROLE", payload: e.target.value })} style={{
             padding: "7px 12px", borderRadius: 10, fontSize: 12, fontWeight: 600, fontFamily: "inherit",
             border: `1px solid ${border}`, background: dk ? "#0f172a" : "#f1f5f9", color: text1, cursor: "pointer"
@@ -486,7 +510,7 @@ export default function App() {
         {activeTab === "Overview" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             {/* Summary Cards */}
-            <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+            <div className="summary-cards" style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
               <SummaryCard icon={Icons.wallet} label="Total Balance" value={fmt(totals.balance)}
                 sub="Updated just now" color={dk ? "#818cf8" : "#4f46e5"} sparkData={[50000, 52000, 48000, 65000, 58000, 72000, totals.balance / 1000]} dark={dk} />
               <SummaryCard icon={Icons.up} label="Income" value={fmt(totals.income)}
@@ -498,7 +522,7 @@ export default function App() {
             </div>
 
             {/* Charts Row */}
-            <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+            <div className="charts-row" style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
               <div style={{
                 flex: "2 1 380px", background: card, borderRadius: 16, padding: 22,
                 border: `1px solid ${border}`, minWidth: 0
@@ -549,11 +573,11 @@ export default function App() {
                 }}>View all →</button>
               </div>
               {transactions.slice(0, 5).map(t => (
-                <div key={t.id} style={{
+                <div key={t.id} className="txn-item" style={{
                   display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 0",
                   borderBottom: `1px solid ${border}`, gap: 12
                 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0, flex: 1 }}>
+                  <div className="txn-item-content" style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0, flex: 1 }}>
                     <div style={{
                       width: 36, height: 36, borderRadius: 10, flexShrink: 0,
                       background: (CAT_COLORS[t.category] || "#94a3b8") + "18",
@@ -565,8 +589,8 @@ export default function App() {
                       <div style={{ fontSize: 11, color: text3 }}>{t.category} · {relDate(t.date)}</div>
                     </div>
                   </div>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: t.type === "income" ? "#10b981" : text1, whiteSpace: "nowrap" }}>
-                    {t.type === "income" ? "+" : "-"}{fmt(t.amount)}
+                  <div className="txn-item-right" style={{ fontSize: 14, fontWeight: 700, color: t.type === "income" ? "#10b981" : text1, whiteSpace: "nowrap", display: "flex", gap: 10, alignItems: "center" }}>
+                    <span style={{flex: 1}}>{t.type === "income" ? "+" : "-"}{fmt(t.amount)}</span>
                   </div>
                 </div>
               ))}
@@ -578,7 +602,7 @@ export default function App() {
         {activeTab === "Transactions" && (
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {/* Toolbar */}
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
+            <div className="toolbar-group" style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
               <div style={{
                 flex: "1 1 200px", display: "flex", alignItems: "center", gap: 8,
                 background: card, border: `1px solid ${border}`, borderRadius: 12, padding: "0 14px",
@@ -617,7 +641,7 @@ export default function App() {
                 <option value="amount-desc">Highest amount</option>
                 <option value="amount-asc">Lowest amount</option>
               </select>
-              <div style={{ display: "flex", gap: 6 }}>
+              <div className="toolbar-actions" style={{ display: "flex", gap: 6 }}>
                 <button onClick={exportCSV} style={{
                   display: "flex", alignItems: "center", gap: 6, padding: "9px 14px", borderRadius: 12, border: `1px solid ${border}`,
                   background: card, color: text2, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit"
@@ -642,12 +666,12 @@ export default function App() {
                 </div>
               ) : (
                 filtered.map((t, i) => (
-                  <div key={t.id} style={{
+                  <div key={t.id} className="txn-item" style={{
                     display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 20px",
                     borderBottom: i < filtered.length - 1 ? `1px solid ${border}` : "none", gap: 12,
                     transition: "background 0.1s",
                   }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 14, minWidth: 0, flex: 1 }}>
+                    <div className="txn-item-content" style={{ display: "flex", alignItems: "center", gap: 14, minWidth: 0, flex: 1 }}>
                       <div style={{
                         width: 40, height: 40, borderRadius: 12, flexShrink: 0,
                         background: (CAT_COLORS[t.category] || "#94a3b8") + "15",
@@ -666,7 +690,7 @@ export default function App() {
                         </div>
                       </div>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <div className="txn-item-right" style={{ display: "flex", alignItems: "center", gap: 10 }}>
                       <div style={{ fontSize: 15, fontWeight: 700, color: t.type === "income" ? "#10b981" : text1, whiteSpace: "nowrap" }}>
                         {t.type === "income" ? "+" : "-"}{fmt(t.amount)}
                       </div>
