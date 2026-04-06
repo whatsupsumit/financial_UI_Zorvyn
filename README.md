@@ -1,73 +1,39 @@
-# React + TypeScript + Vite
+# Finance Dashboard UI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
+A reactive, responsive, and cleanly architected Finance Dashboard built to demonstrate frontend development paradigms, interactive state management, and real-time visualization without relying on heavy third-party chart libraries. Built with React and TypeScript.
 
-Currently, two official plugins are available:
+## Features
+- **Summary Metrics:** Live calculation of Total Balance, Income, and Expenses.
+- **Transactions Management:** View, search, sort, and filter transactions smoothly.
+- **Insight Engine:** Dynamically calculates top spending categories, monthly averages, and savings rate.
+- **Interactive Visualizations:** Custom-built lightweight SVGs for Donuts, Sparklines, and Balance Trends.
+- **Role-Based Access Control (RBAC):** Simulated header toggle. Switch between Admin (can edit/add) and Viewer (read-only mode).
+- **Data Persistence:** Automatically saves all configurations and transactions to `localStorage`.
+- **Dark Mode Support:** Crisp layout transitions.
+- **CSV Exports:** Quick one-click download of filtered reports.
+- **Fully Responsive:** Designed for Desktop, Tablet, and Mobile viewport adaptations.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Setup Instructions
 
-## React Compiler
+To run this project locally:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/whatsupsumit/financial_UI_Zorvyn.git
+   cd financial_UI_Zorvyn
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-## Expanding the ESLint configuration
+## Approach & Structure
+- Developed entirely focused on functional UI requirements.
+- Uses `useReducer` and `useMemo` to safely handle complex derived states and cross-filtering mechanisms.
+- Pure CSS (via styled/inline layouts + injected media queries) ensures the dashboard is perfectly responsive without importing large CSS frameworks.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
